@@ -1,24 +1,19 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License. See LICENSE in the project root for license information.
-
-using System;
-using System.Collections;
-using UnityEngine;
-using HoloToolkit.Unity;
-
-#if UNITY_WSA && !UNITY_EDITOR
+﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using System;
+using HoloToolkit.Unity;
 using UnityEngine.VR.WSA;
 using UnityEngine.VR.WSA.Persistence;
 using UnityEngine.VR.WSA.Sharing;
-#endif
+
 
 namespace HoloToolkit.Sharing.Tests
 {
     /// <summary>
     /// Manages creating anchors and sharing the anchors with other clients.
     /// </summary>
-    public class ImportExportAnchorManager : Singleton<ImportExportAnchorManager>
+    public class ImpExp : MonoBehaviour
     {
         /// <summary>
         /// Enum to track the progress through establishing a shared coordinate system.
@@ -113,7 +108,7 @@ namespace HoloToolkit.Sharing.Tests
         /// </summary>
         public event Action<bool> AnchorUploaded;
 
-#if UNITY_WSA && !UNITY_EDITOR
+
 
         /// <summary>
         /// Called when the anchor has been loaded
@@ -148,7 +143,7 @@ namespace HoloToolkit.Sharing.Tests
         /// </summary>
         private const uint MinTrustworthySerializedAnchorDataSize = 100000;
 
-#endif
+
 
         /// <summary>
         /// Keeps track of stored anchor data blob.
@@ -198,19 +193,11 @@ namespace HoloToolkit.Sharing.Tests
         /// </summary>
         private RoomManagerAdapter roomManagerListener;
 
-        #region Untiy APIs
 
-        protected override void Awake()
+        void Awake()
         {
-           // base.Awake();
-
-#if UNITY_WSA && !UNITY_EDITOR
-            // We need to get our local anchor store started up.
             currentState = ImportExportState.AnchorStore_Initializing;
             WorldAnchorStore.GetAsync(AnchorStoreReady);
-#else
-            currentState = ImportExportState.Ready;
-#endif
         }
 
         private void Start()
@@ -238,9 +225,8 @@ namespace HoloToolkit.Sharing.Tests
                     }
                     break;
                 case ImportExportState.RoomApiInitialized:
-                    StartAnchorProcess();
+                    StartAnchorDownloadProcess();
                     break;
-#if UNITY_WSA && !UNITY_EDITOR
                 case ImportExportState.DataReady:
                     // DataReady is set when the anchor download completes.
                     currentState = ImportExportState.Importing;
@@ -255,11 +241,10 @@ namespace HoloToolkit.Sharing.Tests
                     currentState = ImportExportState.UploadingInitialAnchor;
                     Export();
                     break;
-#endif
             }
         }
 
-        protected override void OnDestroy()
+        void OnDestroy()
         {
             if (SharingStage.Instance != null)
             {
@@ -291,12 +276,10 @@ namespace HoloToolkit.Sharing.Tests
                 roomManager = null;
             }
 
-            base.OnDestroy();
         }
 
-        #endregion
 
-        #region Event Callbacks
+
 
         /// <summary>
         /// Called when the sharing stage connects to a server.
@@ -404,9 +387,8 @@ namespace HoloToolkit.Sharing.Tests
 
                 // If we failed, we can ask for the data again.
                 Debug.LogWarning("Anchor Manager: Anchor DL failed " + failureReason);
-#if UNITY_WSA && !UNITY_EDITOR
-                MakeAnchorDataRequest();
-#endif
+
+                MakeAnchorDataDownloadRequest();
             }
         }
 
@@ -463,14 +445,14 @@ namespace HoloToolkit.Sharing.Tests
             ResetState();
         }
 
-        #endregion
+
 
         /// <summary>
         /// Resets the Anchor Manager state.
         /// </summary>
         private void ResetState()
         {
-#if UNITY_WSA && !UNITY_EDITOR
+
             if (anchorStore != null)
             {
                 currentState = ImportExportState.Ready;
@@ -479,9 +461,6 @@ namespace HoloToolkit.Sharing.Tests
             {
                 currentState = ImportExportState.AnchorStore_Initializing;
             }
-#else
-            currentState = ImportExportState.Ready;
-#endif
         }
 
         /// <summary>
@@ -558,12 +537,9 @@ namespace HoloToolkit.Sharing.Tests
 
             if (currentRoom.GetAnchorCount() == 0)
             {
-#if UNITY_WSA && !UNITY_EDITOR
                 // If the room has no anchors, request the initial anchor
                 currentState = ImportExportState.InitialAnchorRequired;
-#else
-                currentState = ImportExportState.RoomApiInitialized;
-#endif
+
             }
             else
             {
@@ -591,7 +567,7 @@ namespace HoloToolkit.Sharing.Tests
         /// <summary>
         /// Kicks off the process of creating the shared space.
         /// </summary>
-        private void StartAnchorProcess()
+        private void StartAnchorDownloadProcess()
         {
             // First, are there any anchors in this room?
             int anchorCount = currentRoom.GetAnchorCount();
@@ -606,7 +582,6 @@ namespace HoloToolkit.Sharing.Tests
                 AnchorDebugText.text += string.Format("\n{0} anchors found.", anchorCount.ToString());
             }
 
-#if UNITY_WSA && !UNITY_EDITOR
 
             // If there are anchors, we should attach to the first one.
             if (anchorCount > 0)
@@ -629,33 +604,31 @@ namespace HoloToolkit.Sharing.Tests
                     }
 
                     // If we cannot find the anchor by name, we will need the full data blob.
-                    MakeAnchorDataRequest();
+                    MakeAnchorDataDownloadRequest();
                 }
             }
-
-#else
-
-            currentState = ImportExportState.AnchorEstablished;
-
-            if (AnchorDebugText != null)
-            {
-                AnchorDebugText.text += anchorCount > 0 ? "\n" + currentRoom.GetAnchorName(0).ToString() : "\nNo Anchors Found";
-            }
-
-#endif
         }
 
-        #region WSA Specific Methods
-
-#if UNITY_WSA && !UNITY_EDITOR
+        int numberOfRoomAnchors=0;
 
         /// <summary>
         /// Kicks off getting the datablob required to import the shared anchor.
         /// When finished downloading, the RoomManager will raise RoomManagerListener_AnchorsDownloaded.
         /// </summary>
-        private void MakeAnchorDataRequest()
+        private void MakeAnchorDataDownloadRequest()
         {
-            if (roomManager.DownloadAnchor(currentRoom, currentRoom.GetAnchorName(0)))
+
+            numberOfRoomAnchors = currentRoom.GetAnchorCount();
+            int indexOfAnchor = 0;
+            for (int x = 0; x < numberOfRoomAnchors; x++) {
+                if (currentRoom.GetAnchorName(x).ToString().Contains(this.gameObject.name)) {
+                    indexOfAnchor = x;
+                    break;
+                }
+
+            }
+
+            if (roomManager.DownloadAnchor(currentRoom, currentRoom.GetAnchorName(indexOfAnchor)))
             {
                 currentState = ImportExportState.DataRequested;
             }
@@ -779,7 +752,7 @@ namespace HoloToolkit.Sharing.Tests
                     {
                         if (AnchorDebugText != null)
                         {
-                            AnchorDebugText.text += "\n"+anchorName;
+                            AnchorDebugText.text += "\n" + anchorName;
                         }
 
                         anchor.OnTrackingChanged += ImportExportAnchorManager_OnTrackingChanged_Attaching;
@@ -813,7 +786,7 @@ namespace HoloToolkit.Sharing.Tests
                     AnchorDebugText.text += string.Format("\nFailed to find local anchor from cache.");
                 }
 
-                MakeAnchorDataRequest();
+                MakeAnchorDataDownloadRequest();
             }
 
             self.OnTrackingChanged -= ImportExportAnchorManager_OnTrackingChanged_Attaching;
@@ -871,15 +844,34 @@ namespace HoloToolkit.Sharing.Tests
             currentState = ImportExportState.AnchorEstablished;
         }
 
+
+        public string BuildGuid()
+        {
+            // 0123456  substring(4)  456
+
+            DateTime now = DateTime.Now;
+            string guidString;
+            string miniguid = Guid.NewGuid().ToString().Substring(0, 4);
+            //string timestamp = now.ToString().Substring(11);
+            string goname = this.gameObject.name;
+            guidString = miniguid + "_" + goname;
+            return guidString;
+        }
+
         /// <summary>
         /// Exports the currently created anchor.
         /// </summary>
+
+            //EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
         private void Export()
         {
             WorldAnchor anchor = this.GetComponent<WorldAnchor>();
-            string guidString = Guid.NewGuid().ToString();
-            exportingAnchorName = guidString;
 
+            // string guidString = Guid.NewGuid().ToString();
+            // exportingAnchorName = guidString;
+
+            string guidString = BuildGuid();
+            exportingAnchorName = guidString;
             // Save the anchor to our local anchor store.
             if (anchor != null && anchorStore.Save(exportingAnchorName, anchor))
             {
@@ -942,6 +934,11 @@ namespace HoloToolkit.Sharing.Tests
                     new XString(exportingAnchorName),
                     exportingAnchorBytes.ToArray(),
                     exportingAnchorBytes.Count);
+
+                if (AnchorDebugText != null)
+                {
+                    AnchorDebugText.text += string.Format("\nnot sure if got uploaded : " + exportingAnchorName);
+                }
             }
             else
             {
@@ -956,7 +953,6 @@ namespace HoloToolkit.Sharing.Tests
             }
         }
 
-#endif // UNITY_WSA
-        #endregion // WSA Specific Methods
     }
 }
+ 
