@@ -63,10 +63,10 @@ public class FocussedRoomBoxReceiver : MonoBehaviour, IFocusable, IInputClickHan
             tx.text += "\n room name="+currentRoom.GetName().ToString();
             tx.text += "\n room id=  " + currentRoom.GetID().ToString();
             tx.text += "\n user id=  " + localUserId.ToString();
-            tx.text += "\n user name=" + localUserId.ToString();
+            tx.text += " name=" + localUserId.ToString();
 
             int acnt = currentRoom.GetAnchorCount();
-            tx.text += "\n anchors=" + currentRoom.GetAnchorCount().ToString();
+            tx.text += "\n anchors in room =" + currentRoom.GetAnchorCount().ToString();
             //  localUser.GetName().ToString();
             tx.text += "\n";
             for (int x= 0; x< acnt; x++) {

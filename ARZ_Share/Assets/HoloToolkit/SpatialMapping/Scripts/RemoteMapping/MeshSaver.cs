@@ -49,17 +49,19 @@ namespace HoloToolkit.Unity.SpatialMapping
         {
             if (string.IsNullOrEmpty(fileName))
             {
+                CONBUG.Instance.LOGit("Must specify a valid fileName.");
                 throw new ArgumentException("Must specify a valid fileName.");
             }
 
             if (meshFilters == null)
             {
+                CONBUG.Instance.LOGit("Value of meshFilters cannot be null.");
                 throw new ArgumentNullException("Value of meshFilters cannot be null.");
             }
 
             // Create the mesh file.
             String folderName = MeshFolderName;
-            Debug.Log(String.Format("Saving mesh file: {0}", Path.Combine(folderName, fileName + fileExtension)));
+            CONBUG.Instance.LOGit(String.Format("Saving mesh file: {0}", Path.Combine(folderName, fileName + fileExtension)));
 
             using (Stream stream = OpenFileForWrite(folderName, fileName + fileExtension))
             {
@@ -69,7 +71,7 @@ namespace HoloToolkit.Unity.SpatialMapping
                 stream.Flush();
             }
 
-            Debug.Log("Mesh file saved.");
+            CONBUG.Instance.LOGit("Mesh file saved.");
 
             return Path.Combine(folderName, fileName + fileExtension);
         }
@@ -95,7 +97,7 @@ namespace HoloToolkit.Unity.SpatialMapping
 
             // Create the mesh file.
             String folderName = MeshFolderName;
-            Debug.Log(String.Format("Saving mesh file: {0}", Path.Combine(folderName, fileName + fileExtension)));
+            CONBUG.Instance.LOGit(String.Format("Saving mesh file: {0}", Path.Combine(folderName, fileName + fileExtension)));
 
             using (Stream stream = OpenFileForWrite(folderName, fileName + fileExtension))
             {
@@ -105,7 +107,7 @@ namespace HoloToolkit.Unity.SpatialMapping
                 stream.Flush();
             }
 
-            Debug.Log("Mesh file saved.");
+            CONBUG.Instance.LOGit("Mesh file saved.");
 
             return Path.Combine(folderName, fileName + fileExtension);
         }
@@ -127,7 +129,7 @@ namespace HoloToolkit.Unity.SpatialMapping
 
             // Open the mesh file.
             String folderName = MeshFolderName;
-            Debug.Log(String.Format("Loading mesh file: {0}", Path.Combine(folderName, fileName + fileExtension)));
+            CONBUG.Instance.LOGit(String.Format("Loading mesh file: {0}", Path.Combine(folderName, fileName + fileExtension)));
 
             using (Stream stream = OpenFileForRead(folderName, fileName + fileExtension))
             {
@@ -138,7 +140,7 @@ namespace HoloToolkit.Unity.SpatialMapping
                 meshes.AddRange(SimpleMeshSerializer.Deserialize(data));
             }
 
-            Debug.Log("Mesh file loaded.");
+            CONBUG.Instance.LOGit("Mesh file loaded.");
 
             return meshes;
         }

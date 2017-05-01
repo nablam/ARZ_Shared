@@ -11,8 +11,8 @@ using HoloToolkit.Unity.SpatialMapping;
 public class RoomSaver : MonoBehaviour
 {
 
-    public string fileName;             // name of file to store meshes
-    public string anchorStoreName;      // name of world anchor to store for room
+    string fileName="nabroom";             // name of file to store meshes
+    string anchorStoreName="nabmesh";      // name of world anchor to store for room
 
     List<MeshFilter> roomMeshFilters;
     WorldAnchorStore anchorStore;
@@ -45,14 +45,14 @@ public class RoomSaver : MonoBehaviour
             }
         }
 
-        Debug.Log("Old anchors deleted...");
+        CONBUG.Instance.LOGit("Old anchors deleted...");
 
         // get all mesh filters used for spatial mapping meshes
 
         // Nabil fix this
          roomMeshFilters = SpatialMappingManager.Instance.GetMeshFilters() as List<MeshFilter>;
 
-        Debug.Log("Mesh filters fetched...");
+        CONBUG.Instance.LOGit("Mesh filters fetched...");
 
         // create new list of room meshes for serialization
         List<Mesh> roomMeshes = new List<Mesh>();
@@ -67,7 +67,7 @@ public class RoomSaver : MonoBehaviour
             string meshName = anchorStoreName + meshCount.ToString();
             filter.mesh.name = meshName;
 
-            // Debug.Log("Mesh " + filter.mesh.name + ": " + filter.transform.position + "\n--- rotation " + filter.transform.localRotation + "\n--- scale: " + filter.transform.localScale);
+            // CONBUG.Instance.LOGit("Mesh " + filter.mesh.name + ": " + filter.transform.position + "\n--- rotation " + filter.transform.localRotation + "\n--- scale: " + filter.transform.localScale);
             // add mesh to room meshes for serialization
             roomMeshes.Add(filter.mesh);
 
@@ -76,21 +76,21 @@ public class RoomSaver : MonoBehaviour
             if (attachingAnchor == null)
             {
                 attachingAnchor = filter.gameObject.AddComponent<WorldAnchor>();
-                // Debug.Log("" + filter.mesh.name + ": Using new anchor...");
+                // CONBUG.Instance.LOGit("" + filter.mesh.name + ": Using new anchor...");
             }
             else
             {//
-             // Debug.Log("" + filter.mesh.name + ": Deleting existing anchor...");
+             // CONBUG.Instance.LOGit("" + filter.mesh.name + ": Deleting existing anchor...");
                 DestroyImmediate(attachingAnchor);
-                //  Debug.Log("" + filter.mesh.name + ": Creating new anchor...");
+                //  CONBUG.Instance.LOGit("" + filter.mesh.name + ": Creating new anchor...");
                 attachingAnchor = filter.gameObject.AddComponent<WorldAnchor>();
             }
             if (attachingAnchor.isLocated)
             {
                 if (!anchorStore.Save(meshName, attachingAnchor))
-                    Debug.Log("" + meshName + ": Anchor save failed...");
+                    CONBUG.Instance.LOGit("" + meshName + ": Anchor save failed...");
                 else
-                    Debug.Log("" + meshName + ": Anchor SAVED...");
+                    CONBUG.Instance.LOGit("" + meshName + ":   Anchor SAVED...");
             }
             else
             {
@@ -109,9 +109,9 @@ public class RoomSaver : MonoBehaviour
         {
             string meshName = self.gameObject.GetComponent<MeshFilter>().mesh.name;
             if (!anchorStore.Save(meshName, self))
-                Debug.Log("" + meshName + ": Anchor save failed...");
+                CONBUG.Instance.LOGit("" + meshName + ": Anchor save failed...");
             else
-                Debug.Log("" + meshName + ": Anchor SAVED...");
+                CONBUG.Instance.LOGit("" + meshName + ": Anchor SAVED...");
 
             self.OnTrackingChanged -= AttachingAnchor_OnTrackingChanged;
         }
