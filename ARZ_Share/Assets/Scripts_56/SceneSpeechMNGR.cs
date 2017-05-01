@@ -24,7 +24,10 @@ public class SceneSpeechMNGR : MonoBehaviour {
             SceneManager.LoadScene("ScanRoom");
         });
 
-
+        keywords.Add("other room", () =>
+        {
+            SceneManager.LoadScene("otherscene");
+        });
 
         // Tell the KeywordRecognizer about our keywords.
         keywordRecognizer = new KeywordRecognizer(keywords.Keys.ToArray());

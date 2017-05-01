@@ -18,15 +18,19 @@ namespace HoloToolkit.Sharing.Utilities
             {
                 case LogSeverity.Warning:
                     Debug.LogWarning(message);
+                    CONBUG.Instance.LOGit(message, "!Warnning!");
                     break;
                 case LogSeverity.Error:
                     Debug.LogError(message);
+                    CONBUG.Instance.LOGit(message, "!Error!");
                     break;
                 case LogSeverity.Info:
                 default:
                     if (ShowDetailedLogs)
                     {
                         Debug.Log(message);
+                        if(CONBUG.Instance)
+                        CONBUG.Instance.LOGit(message);
                     }
                     break;
             }
