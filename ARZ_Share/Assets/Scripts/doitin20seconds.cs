@@ -11,7 +11,7 @@ public class doitin20seconds : MonoBehaviour {
 
 
     bool builtonce = false;
-    float twentycesonds = 40f;
+    float twentycesonds = 10f;
 	void Update () {
         twentycesonds -= Time.deltaTime;
         if (twentycesonds<0) {
@@ -21,8 +21,9 @@ public class doitin20seconds : MonoBehaviour {
 
     void buildonce() {
         if (!builtonce) {
-            Instantiate(thisdgy);
-            builtonce = true;
+            // Instantiate(thisdgy);
+            thisdgy.AddComponent<bogus>();
+             builtonce = true;
         }
     }
 }

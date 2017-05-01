@@ -19,31 +19,13 @@ public class SceneSpeechMNGR : MonoBehaviour {
     {
     
 
-        keywords.Add("Main Menu", () =>
+        keywords.Add("Scann room", () =>
         {
-            // load main menu scene
-            SceneManager.LoadScene("main56");
+            SceneManager.LoadScene("ScanRoom");
         });
-        keywords.Add("Editor", () =>
-        {
-            // load main menu scene
-            SceneManager.LoadScene("Edit56");
-        });
-        keywords.Add("Scanner", () =>
-        {
-            // load main menu scene
-            SceneManager.LoadScene("Scan56");
-        });
-        keywords.Add("Start Game", () =>
-        {
-            // load main menu scene
-            SceneManager.LoadScene("Game56");
-        });
-        keywords.Add("Connect Play", () =>
-        {
-            // load main menu scene
-            SceneManager.LoadScene("Multi56");
-        });
+
+
+
         // Tell the KeywordRecognizer about our keywords.
         keywordRecognizer = new KeywordRecognizer(keywords.Keys.ToArray());
 
@@ -60,13 +42,4 @@ public class SceneSpeechMNGR : MonoBehaviour {
             keywordAction.Invoke();
         }
     }
-
-    //int cnt = 0;
-    //private void Update()
-    //{
-    //    cnt++;
-    //    if(cnt%11 == 0)
-    //    CONBUG.Instance.LOGit(""+cnt);
-    //}
-
 }

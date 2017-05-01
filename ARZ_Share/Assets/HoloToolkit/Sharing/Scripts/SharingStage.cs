@@ -22,7 +22,7 @@ namespace HoloToolkit.Sharing
         /// Default username to use when joining a session.
         /// </summary>
         /// <remarks>User code should set the user name by setting the UserName property.</remarks>
-        private const string DefaultUserName = "User ";
+        private const string DefaultUserName = "BobUser ";
 
         /// <summary>
         /// Set whether this app should be a Primary or Secondary client.
@@ -123,6 +123,8 @@ namespace HoloToolkit.Sharing
 
         public string UserName
         {
+
+
             get
             {
                 using (User user = Manager.GetLocalUser())
@@ -177,7 +179,7 @@ namespace HoloToolkit.Sharing
         protected override void Awake()
         {
             base.Awake();
-
+           // DontDestroyOnLoad(this.gameObject);
             AppInstanceUniqueId = Guid.NewGuid().ToString();
             logWriter = new ConsoleLogWriter();
             logWriter.ShowDetailedLogs = ShowDetailedLogs;

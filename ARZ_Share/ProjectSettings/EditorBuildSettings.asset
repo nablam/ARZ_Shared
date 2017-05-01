@@ -5,6 +5,18 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/sharingagain.unity
     guid: f2777d9c27fbd2c49938aecc34e461ba
+  - enabled: 0
+    path: Assets/Scenes/smartSharing.unity
+    guid: f48e8d3de28ae9a418882c7aaa27488e
+  - enabled: 0
+    path: Assets/Scenes/otherscene.unity
+    guid: 496da1b25b4e1734ba3e21d10f0ae9dd
+  - enabled: 1
+    path: Assets/Scenes/EntyPoint.unity
+    guid: 573dba8d049f0f84582bf6c1acc416e4
+  - enabled: 1
+    path: Assets/Scenes/ScanRoom.unity
+    guid: 48b4f109cc2465141b6fd142cbb8886e

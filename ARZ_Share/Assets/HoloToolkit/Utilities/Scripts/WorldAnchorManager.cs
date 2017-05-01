@@ -59,7 +59,11 @@ namespace HoloToolkit.Unity
         /// </summary>
         protected override void Awake()
         {
-            base.Awake();
+          //  base.Awake();
+
+        }
+        private void Start()
+        {
 
             AnchorStore = null;
             WorldAnchorStore.GetAsync(AnchorStoreReady);
