@@ -26,3 +26,6 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/HoloToolkit-Tests/Sharing/Scenes/RoomAndAnchorTest.unity
     guid: ce35045e930c3b442881305966b17fee
+  - enabled: 0
+    path: Assets/HoloToolkit-Tests/Sharing/Scenes/SharingSpawnTest.unity
+    guid: ce1ce2e2fae76fe41a127041a7fd6df3

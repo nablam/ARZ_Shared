@@ -57,8 +57,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4374769726263552}
   - component: {fileID: 114492038560832432}
+  - component: {fileID: 114720547537892466}
   m_Layer: 0
-  m_Name: RootClickBlock
+  m_Name: Root_LocalAnchorKiopsk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -151,7 +152,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1638587027051870}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 2}
+  m_LocalPosition: {x: -0.77, y: -0.11, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4695901931998558}
@@ -194,7 +195,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1028882043452056}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.021000005, z: 0}
+  m_LocalPosition: {x: -0.016, y: 0.014, z: -0.088}
   m_LocalScale: {x: 0.005, y: 0.005, z: 0.02}
   m_Children: []
   m_Father: {fileID: 4374769726263552}
@@ -496,6 +497,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PivotAxis: 0
+--- !u!114 &114720547537892466
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1638587027051870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ed69d220fca10f47ad2fff0daef1bea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114776191408278522
 MonoBehaviour:
   m_ObjectHideFlags: 1

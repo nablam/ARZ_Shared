@@ -80,6 +80,8 @@ namespace HoloToolkit.Sharing.Tests
         {
             get
             {
+
+
                 if (SharingStage.Instance == null || SharingStage.Instance.SessionUsersTracker == null)
                 {
                     return false;
@@ -171,7 +173,7 @@ namespace HoloToolkit.Sharing.Tests
         /// <summary>
         /// Some room ID for indicating which room we are in.
         /// </summary>
-        private long roomID = 8675309;
+        private long roomID = 1337;//8675309;
 
         /// <summary>
         /// Indicates if the room should kept around even after all users leave
@@ -181,7 +183,7 @@ namespace HoloToolkit.Sharing.Tests
         /// <summary>
         /// Room name to join
         /// </summary>
-        public string RoomName = "DefaultRoom";
+        public string RoomName = "LEETroom";
 
         /// <summary>
         /// Debug text for displaying information.
@@ -196,12 +198,16 @@ namespace HoloToolkit.Sharing.Tests
 
         void Awake()
         {
-            currentState = ImportExportState.AnchorStore_Initializing;
-            WorldAnchorStore.GetAsync(AnchorStoreReady);
+
         }
 
-        private void Start()
+        IEnumerator DoAnchorReadyin2()
         {
+            yield return new WaitForSeconds(2);
+
+            currentState = ImportExportState.AnchorStore_Initializing;
+            WorldAnchorStore.GetAsync(AnchorStoreReady);
+
             // SharingStage should be valid at this point, but we may not be connected.
             if (SharingStage.Instance.IsConnected)
             {
@@ -212,6 +218,10 @@ namespace HoloToolkit.Sharing.Tests
                 SharingStage.Instance.SharingManagerConnected += Connected;
             }
         }
+        private void Start()
+        {
+            StartCoroutine("DoAnchorReadyin2");
+        }
 
         private void Update()
         {
@@ -219,7 +229,7 @@ namespace HoloToolkit.Sharing.Tests
             {
                 // If the local anchor store is initialized.
                 case ImportExportState.Ready:
-                    if (sharingServiceReady)
+                    if (PlayerRoomManager.Instance.sharingServiceReady)
                     {
                         StartCoroutine(InitRoomApi());
                     }
@@ -292,7 +302,7 @@ namespace HoloToolkit.Sharing.Tests
 
             if (SharingStage.Instance.ShowDetailedLogs)
             {
-                Debug.Log("Anchor Manager: Starting...");
+                CONBUG.Instance.LOGit("Anchor Manager: Starting...");
             }
 
             if (AnchorDebugText != null)
@@ -326,7 +336,7 @@ namespace HoloToolkit.Sharing.Tests
 
                 if (SharingStage.Instance.ShowDetailedLogs)
                 {
-                    Debug.Log("Anchor Manager: Sucessfully uploaded anchor");
+                    CONBUG.Instance.LOGit("Anchor Manager: Sucessfully uploaded anchor");
                 }
 
                 if (AnchorDebugText != null)
@@ -343,7 +353,7 @@ namespace HoloToolkit.Sharing.Tests
                     AnchorDebugText.text += string.Format("\n Upload failed " + failureReason);
                 }
 
-                Debug.LogError("Anchor Manager: Upload failed " + failureReason);
+                CONBUG.Instance.LOGitError("Anchor Manager: Upload failed " + failureReason);
                 currentState = ImportExportState.Failed;
             }
 
@@ -365,7 +375,7 @@ namespace HoloToolkit.Sharing.Tests
 
                 if (SharingStage.Instance.ShowDetailedLogs)
                 {
-                    Debug.LogFormat("Anchor Manager: Anchor size: {0} bytes.", datasize.ToString());
+                    CONBUG.Instance.LOGitFormat("Anchor Manager: Anchor size: {0} bytes.", datasize.ToString());
                 }
 
                 if (AnchorDebugText != null)
@@ -386,7 +396,7 @@ namespace HoloToolkit.Sharing.Tests
                 }
 
                 // If we failed, we can ask for the data again.
-                Debug.LogWarning("Anchor Manager: Anchor DL failed " + failureReason);
+                CONBUG.Instance.LOGitWarning("Anchor Manager: Anchor DL failed " + failureReason);
 
                 MakeAnchorDataDownloadRequest();
             }
@@ -400,7 +410,7 @@ namespace HoloToolkit.Sharing.Tests
         {
             if (SharingStage.Instance.ShowDetailedLogs)
             {
-                Debug.LogFormat("Anchor Manager: Anchors in room {0} changed", room.GetName());
+                CONBUG.Instance.LOGitFormat("Anchor Manager: Anchors in room {0} changed", room.GetName());
             }
 
             if (AnchorDebugText != null)
@@ -428,7 +438,7 @@ namespace HoloToolkit.Sharing.Tests
             }
             else
             {
-                Debug.LogWarning("Unable to get local user on session joined");
+                CONBUG.Instance.LOGitWarning("Unable to get local user on session joined");
             }
         }
 
@@ -482,7 +492,8 @@ namespace HoloToolkit.Sharing.Tests
                     {
                         if (SharingStage.Instance.ShowDetailedLogs)
                         {
-                            Debug.Log("Anchor Manager: Creating room " + RoomName);
+                            
+                            CONBUG.Instance.LOGit("Anchor Manager: Creating room " + RoomName);
                         }
 
                         if (AnchorDebugText != null)
@@ -509,7 +520,7 @@ namespace HoloToolkit.Sharing.Tests
 
                             if (SharingStage.Instance.ShowDetailedLogs)
                             {
-                                Debug.Log("Anchor Manager: Joining room " + room.GetName().GetString());
+                                CONBUG.Instance.LOGit("Anchor Manager: Joining room " + room.GetName().GetString());
                             }
 
                             if (AnchorDebugText != null)
@@ -549,9 +560,7 @@ namespace HoloToolkit.Sharing.Tests
 
             if (SharingStage.Instance.ShowDetailedLogs)
             {
-                Debug.LogFormat("Anchor Manager: In room {0} with ID {1}",
-                    roomManager.GetCurrentRoom().GetName().GetString(),
-                    roomManager.GetCurrentRoom().GetID().ToString());
+                CONBUG.Instance.LOGit("Anchor Manager: In room " + roomManager.GetCurrentRoom().GetName().GetString() + "  with ID {1}" +roomManager.GetCurrentRoom().GetID().ToString());
             }
 
             if (AnchorDebugText != null)
@@ -574,7 +583,7 @@ namespace HoloToolkit.Sharing.Tests
 
             if (SharingStage.Instance.ShowDetailedLogs)
             {
-                Debug.LogFormat("Anchor Manager: {0} anchors found.", anchorCount.ToString());
+                CONBUG.Instance.LOGitFormat("Anchor Manager: {0} anchors found.", anchorCount.ToString());
             }
 
             if (AnchorDebugText != null)
@@ -595,7 +604,7 @@ namespace HoloToolkit.Sharing.Tests
                 {
                     if (SharingStage.Instance.ShowDetailedLogs)
                     {
-                        Debug.Log("Anchor Manager: Starting room anchor download of " + storedAnchorString);
+                        CONBUG.Instance.LOGit("Anchor Manager: Starting room anchor download of " + storedAnchorString);
                     }
 
                     if (AnchorDebugText != null)
@@ -634,7 +643,7 @@ namespace HoloToolkit.Sharing.Tests
             }
             else
             {
-                Debug.LogError("Anchor Manager: Couldn't make the download request.");
+                CONBUG.Instance.LOGitError("Anchor Manager: Couldn't make the download request.");
 
                 if (AnchorDebugText != null)
                 {
@@ -686,7 +695,7 @@ namespace HoloToolkit.Sharing.Tests
             {
                 if (SharingStage.Instance.ShowDetailedLogs)
                 {
-                    Debug.Log("Anchor Manager: Found anchor, ready to export");
+                    CONBUG.Instance.LOGit("Anchor Manager: Found anchor, ready to export");
                 }
 
                 if (AnchorDebugText != null)
@@ -698,7 +707,7 @@ namespace HoloToolkit.Sharing.Tests
             }
             else
             {
-                Debug.LogError("Anchor Manager: Failed to locate local anchor!");
+                CONBUG.Instance.LOGitError("Anchor Manager: Failed to locate local anchor!");
 
                 if (AnchorDebugText != null)
                 {
@@ -719,7 +728,7 @@ namespace HoloToolkit.Sharing.Tests
         {
             if (SharingStage.Instance.ShowDetailedLogs)
             {
-                Debug.LogFormat("Anchor Manager: Looking for cahced anchor {0}...", anchorName);
+                CONBUG.Instance.LOGitFormat("Anchor Manager: Looking for cahced anchor {0}...", anchorName);
             }
 
             if (AnchorDebugText != null)
@@ -734,7 +743,7 @@ namespace HoloToolkit.Sharing.Tests
                 {
                     if (SharingStage.Instance.ShowDetailedLogs)
                     {
-                        Debug.LogFormat("Anchor Manager: Attempting to load cached anchor {0}...", anchorName);
+                        CONBUG.Instance.LOGitFormat("Anchor Manager: Attempting to load cached anchor {0}...", anchorName);
                     }
 
                     if (AnchorDebugText != null)
@@ -779,7 +788,7 @@ namespace HoloToolkit.Sharing.Tests
             }
             else
             {
-                Debug.LogWarning("Anchor Manager: Failed to find local anchor from cache.");
+                CONBUG.Instance.LOGitWarning("Anchor Manager: Failed to find local anchor from cache.");
 
                 if (AnchorDebugText != null)
                 {
@@ -807,7 +816,7 @@ namespace HoloToolkit.Sharing.Tests
 
                     if (SharingStage.Instance.ShowDetailedLogs)
                     {
-                        Debug.Log("Anchor Manager: Sucessfully imported anchor " + first);
+                        CONBUG.Instance.LOGit("Anchor Manager: Sucessfully imported anchor " + first);
                     }
 
                     if (AnchorDebugText != null)
@@ -823,7 +832,7 @@ namespace HoloToolkit.Sharing.Tests
             }
             else
             {
-                Debug.LogError("Anchor Manager: Import failed");
+                CONBUG.Instance.LOGitError("Anchor Manager: Import failed");
 
                 if (AnchorDebugText != null)
                 {
@@ -877,7 +886,7 @@ namespace HoloToolkit.Sharing.Tests
             {
                 if (SharingStage.Instance.ShowDetailedLogs)
                 {
-                    Debug.Log("Anchor Manager: Exporting anchor " + exportingAnchorName);
+                    CONBUG.Instance.LOGit("Anchor Manager: Exporting anchor " + exportingAnchorName);
                 }
 
                 if (AnchorDebugText != null)
@@ -891,7 +900,7 @@ namespace HoloToolkit.Sharing.Tests
             }
             else
             {
-                Debug.LogWarning("Anchor Manager: Failed to export anchor, trying again...");
+                CONBUG.Instance.LOGitWarning("Anchor Manager: Failed to export anchor, trying again...");
 
                 if (AnchorDebugText != null)
                 {
@@ -921,7 +930,7 @@ namespace HoloToolkit.Sharing.Tests
             {
                 if (SharingStage.Instance.ShowDetailedLogs)
                 {
-                    Debug.Log("Anchor Manager: Uploading anchor: " + exportingAnchorName);
+                    CONBUG.Instance.LOGit("Anchor Manager: Uploading anchor: " + exportingAnchorName);
                 }
 
                 if (AnchorDebugText != null)
@@ -942,7 +951,7 @@ namespace HoloToolkit.Sharing.Tests
             }
             else
             {
-                Debug.LogWarning("Anchor Manager: Failed to upload anchor, trying again...");
+                CONBUG.Instance.LOGitWarning("Anchor Manager: Failed to upload anchor, trying again...");
 
                 if (AnchorDebugText != null)
                 {

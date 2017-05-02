@@ -20,6 +20,17 @@ public class CONBUG : Singleton<CONBUG>{
         tm.text += linenum+"|"+str;
     }
 
+    public void LOGitError(string argstr) {
+        LOGit(argstr, "ERROR!");
+    }
+    public void LOGitFormat(string ArgFormat, string argstr) {
+        string s = string.Format(ArgFormat, argstr);
+        LOGit(s);
+
+    }
+    public void LOGitWarning(string argstr) {
+        LOGit(argstr, "WARNING!");
+    }
     public void LOGit(string str,string who)
     {
         linenum++;

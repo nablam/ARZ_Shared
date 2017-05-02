@@ -1,17 +1,20 @@
 ﻿ 
 using UnityEngine;
-
+using System.Collections;
+using System.Collections.Generic;
 using HoloToolkit.Sharing;
 using System;
-using System.Collections;
+using HoloToolkit.Unity;
 
-public class PlayerRoomManager : MonoBehaviour {
+//roommanager will set IS_SERVER in PlayerStats
+public class PlayerRoomManager : Singleton<PlayerRoomManager>
+{
 
     private RoomManager roomManager;
     private Room currentRoom;
     private long roomID = 1337;
     private string RoomName = "LEETroom";
-    private bool sharingServiceReady;
+    public bool sharingServiceReady;
     private bool AlreadyDone;
 
     private enum RoomManagerStates
@@ -95,10 +98,15 @@ public class PlayerRoomManager : MonoBehaviour {
             {
                 if (ShouldLocalUserCreateRoom)
                 {
+                    PlayerStats.Instance.SetIsServer(true);
                     CONBUG.Instance.LOGit("Creating room 4I am server " + RoomName);
                     // To keep anchors alive even if all users have left the session ...
                     // Pass in true instead of false in CreateRoom.
                     currentRoom = roomManager.CreateRoom(new XString(RoomName), roomID, false);
+                }
+                else
+                {
+                    PlayerStats.Instance.SetIsServer(false);
                 }
                
             }
