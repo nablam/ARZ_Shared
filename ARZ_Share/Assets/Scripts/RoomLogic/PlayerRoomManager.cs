@@ -17,6 +17,7 @@ public class PlayerRoomManager : Singleton<PlayerRoomManager>
     public bool sharingServiceReady;
     private bool AlreadyDone;
 
+    public Room GetCurrRoomSingleton() { return currentRoom; }
     private enum RoomManagerStates
     {
         // Overall states
