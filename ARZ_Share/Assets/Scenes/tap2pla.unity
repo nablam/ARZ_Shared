@@ -195,6 +195,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 20000013304850028, guid: d379ed0a5618c9f479f58bd83a2d0ad3,
+        type: 2}
+      propertyPath: near clip plane
+      value: 0.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d379ed0a5618c9f479f58bd83a2d0ad3, type: 2}
   m_IsPrefabParent: 0
@@ -237,6 +242,8 @@ GameObject:
   - component: {fileID: 567089163}
   - component: {fileID: 567089164}
   - component: {fileID: 567089165}
+  - component: {fileID: 567089166}
+  - component: {fileID: 567089167}
   m_Layer: 0
   m_Name: syncParent
   m_TagString: Untagged
@@ -282,6 +289,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnManager: {fileID: 1599425464}
+--- !u!114 &567089166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 567089162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18c61d710d87465418898f32b8d5158c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  P1Helmet: {fileID: 1164447827227292, guid: 4b181f0b7c108df46bbcc6f40dd2a1fa, type: 2}
+--- !u!114 &567089167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 567089162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7a63ef1b98adec49bdb80fe1f187893, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &663291579
 Prefab:
   m_ObjectHideFlags: 0
