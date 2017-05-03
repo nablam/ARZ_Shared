@@ -29,8 +29,7 @@ namespace HoloToolkit.Sharing.Utilities
                     if (ShowDetailedLogs)
                     {
                         Debug.Log(message);
-                        if(CONBUG.Instance)
-                        CONBUG.Instance.LOGit(message);
+                       // if(CONBUG.Instance)CONBUG.Instance.LOGit(message);
                     }
                     break;
             }

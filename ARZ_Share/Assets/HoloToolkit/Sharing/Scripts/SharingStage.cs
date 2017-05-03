@@ -119,7 +119,7 @@ namespace HoloToolkit.Sharing
         private bool isTryingToFindServer;
 
         [Tooltip("Show Detailed Information for server connections")]
-        public bool ShowDetailedLogs=true;
+        public bool ShowDetailedLogs;
 
         public string UserName
         {

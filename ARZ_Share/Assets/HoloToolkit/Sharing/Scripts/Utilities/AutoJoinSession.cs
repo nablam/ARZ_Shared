@@ -54,8 +54,8 @@ namespace HoloToolkit.Sharing.Utilities
                 {
                     if (SharingStage.Instance.ShowDetailedLogs)
                     {
-                        Debug.LogFormat("AutoJoinSession: Session connected is {0} with {1} Sessions.", sessionsTracker.IsServerConnected.ToString(), sessionsTracker.Sessions.Count.ToString());
-                        Debug.Log("AutoJoinSession: Looking for " + SessionName);
+                        Debug.LogFormat("from AutoJoinSession: Session connected is {0} with {1} Sessions.", sessionsTracker.IsServerConnected.ToString(), sessionsTracker.Sessions.Count.ToString());
+                        Debug.Log("from AutoJoinSession: Looking for " + SessionName);
                     }
                     bool sessionFound = false;
 
@@ -75,7 +75,7 @@ namespace HoloToolkit.Sharing.Utilities
                     {
                         if (SharingStage.Instance.ShowDetailedLogs)
                         {
-                            Debug.Log("Didn't find session, making a new one");
+                            Debug.Log("from AutoJoinSession: Didn't find session, making a new one");
                         }
 
                         if (sessionsTracker.CreateSession(new XString(SessionName)))
