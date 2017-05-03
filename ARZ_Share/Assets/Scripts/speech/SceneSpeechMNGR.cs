@@ -1,4 +1,5 @@
-﻿using HoloToolkit.Unity;
+﻿// @Author Nabil Lamriben ©2017
+using HoloToolkit.Unity;
 using HoloToolkit.Unity.InputModule;
 using System.Collections.Generic;
 using System.Linq;

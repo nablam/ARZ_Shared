@@ -202,7 +202,7 @@ namespace HoloToolkit.Sharing.Tests
 
         protected override void Awake()
         {
-           // base.Awake();
+            base.Awake();
 
 #if UNITY_WSA && !UNITY_EDITOR
             // We need to get our local anchor store started up.

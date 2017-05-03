@@ -179,7 +179,8 @@ namespace HoloToolkit.Sharing
         protected override void Awake()
         {
             base.Awake();
-           // DontDestroyOnLoad(this.gameObject);
+            ShowDetailedLogs = true;
+            // DontDestroyOnLoad(this.gameObject);
             AppInstanceUniqueId = Guid.NewGuid().ToString();
             logWriter = new ConsoleLogWriter();
             logWriter.ShowDetailedLogs = ShowDetailedLogs;
