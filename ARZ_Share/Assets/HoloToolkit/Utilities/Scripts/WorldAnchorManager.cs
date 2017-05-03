@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.VR.WSA.Persistence;
 using UnityEngine.VR.WSA;
 using HoloToolkit.Unity.SpatialMapping;
+using System.Collections;
 
 namespace HoloToolkit.Unity
 {
@@ -60,7 +61,15 @@ namespace HoloToolkit.Unity
         protected override void Awake()
         {
             base.Awake();
+        }
+        private void Start()
+        {
+            StartCoroutine("fetchin2sec");
+        }
 
+        IEnumerator fetchin2sec()
+        {
+            yield return new WaitForSeconds(2);
             AnchorStore = null;
             WorldAnchorStore.GetAsync(AnchorStoreReady);
         }

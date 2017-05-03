@@ -19,6 +19,7 @@ namespace HoloToolkit.Unity.SpatialMapping
 
     public class TapToPlace : MonoBehaviour, IInputClickHandler
     {
+
         [Tooltip("Supply a friendly name for the anchor as the key name for the WorldAnchorStore.")]
         public string SavedAnchorFriendlyName = "SavedAnchorFriendlyName";
 
@@ -64,7 +65,11 @@ namespace HoloToolkit.Unity.SpatialMapping
 
             if (anchorManager != null && spatialMappingManager != null)
             {
-                anchorManager.AttachAnchor(gameObject, SavedAnchorFriendlyName);
+                // If we are not starting out with actively placing the object, give it a World Anchor
+                if (!IsBeingPlaced)
+                {
+                    anchorManager.AttachAnchor(gameObject, SavedAnchorFriendlyName);
+                }
             }
             else
             {
