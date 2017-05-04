@@ -216,7 +216,10 @@ namespace HoloToolkit.Sharing.Spawning
         /// <returns></returns>
         protected virtual GameObject CreatePrefabInstance(SyncSpawnedObject dataModel, GameObject prefabToInstantiate, GameObject parentObject, string objectName)
         {
-            GameObject instance = Instantiate(prefabToInstantiate, dataModel.Transform.Position.Value, dataModel.Transform.Rotation.Value);
+           GameObject instance = Instantiate(prefabToInstantiate, dataModel.Transform.Position.Value, dataModel.Transform.Rotation.Value);
+
+//            GameObject instance = Instantiate(prefabToInstantiate, dataModel.Transform.Position.Value, prefabToInstantiate.transform.rotation);
+
             instance.transform.localScale = dataModel.Transform.Scale.Value;
             instance.transform.SetParent(parentObject.transform, false);
             instance.gameObject.name = objectName;
