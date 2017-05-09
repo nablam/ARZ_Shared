@@ -69,10 +69,17 @@ namespace HoloToolkit.Sharing.Spawning
             if (!string.IsNullOrEmpty(spawnedObject.ParentPath.Value))
             {
                 parent = GameObject.Find(spawnedObject.ParentPath.Value);
+
                 if (parent == null)
                 {
                     Debug.LogErrorFormat("Parent object '{0}' could not be found to instantiate object.", spawnedObject.ParentPath);
+                    CONBUG.Instance.LOGitFormat("Parent object '{0}' could not be found to instantiate object.", spawnedObject.ParentPath.ToString());
                     return;
+                }
+                else
+                {
+                    CONBUG.Instance.LOGitFormat("Parent object '{0}'  was found.", parent.name);
+
                 }
             }
 
@@ -143,8 +150,10 @@ namespace HoloToolkit.Sharing.Spawning
             if (parent == null)
             {
                 parent = gameObject;
+                CONBUG.Instance.LOGit("dady=" + parent.name);
             }
-
+            else
+                CONBUG.Instance.LOGit(" No parent passed");
             // Validate that the prefab is valid
             GameObject prefabToSpawn = GetPrefab(dataModel, baseName);
             if (!prefabToSpawn)
@@ -174,7 +183,7 @@ namespace HoloToolkit.Sharing.Spawning
                 owner = SharingStage.Instance.Manager.GetLocalUser();
             }
 
-            SyncSource.AddObject(dataModel, owner);
+            SyncSource.AddObject(dataModel, owner); //will call Spawnmanager OnObjectAdded() ------------------------------------------------UP which calls this InstantiateFromNetwork
             return true;
         }
 

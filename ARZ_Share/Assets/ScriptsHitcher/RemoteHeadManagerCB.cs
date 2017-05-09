@@ -5,10 +5,30 @@ using UnityEngine;
 using HoloToolkit.Unity;
 using HoloToolkit.Sharing.Tests;
 using HoloToolkit.Sharing;
+using System.Collections;
 
 public class RemoteHeadManagerCB : Singleton<RemoteHeadManagerCB>
 {
     public GameObject P1Helmet;
+    public GameObject P2Helmet;
+    private bool IAMSERVER = false;
+    bool started = false;
+
+    bool initIdentity() {
+        long localUserId;
+        using (User localUser = SharingStage.Instance.Manager.GetLocalUser())
+        {
+            localUserId = localUser.GetID();
+        }
+        for (int i = 0; i < SharingStage.Instance.SessionUsersTracker.CurrentUsers.Count; i++)
+        {
+            if (SharingStage.Instance.SessionUsersTracker.CurrentUsers[i].GetID() < localUserId)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 
     public class RemoteHeadInfo
     {
@@ -21,19 +41,26 @@ public class RemoteHeadManagerCB : Singleton<RemoteHeadManagerCB>
     /// </summary>
     private Dictionary<long, RemoteHeadInfo> remoteHeads = new Dictionary<long, RemoteHeadInfo>();
 
-    private void Start()
-    {
-        CustomMessages.Instance.MessageHandlers[CustomMessages.TestMessageID.HeadTransform] = UpdateHeadTransform;
-
+    IEnumerator startin1() {
+        yield return new WaitForSeconds(1);
         // SharingStage should be valid at this point, but we may not be connected.
         if (SharingStage.Instance.IsConnected)
         {
+            IAMSERVER = initIdentity();
             Connected();
         }
         else
         {
             SharingStage.Instance.SharingManagerConnected += Connected;
         }
+
+        started = true;
+    }
+    private void Start()
+    {
+        CustomMessages.Instance.MessageHandlers[CustomMessages.TestMessageID.HeadTransform] = UpdateHeadTransform;
+        StartCoroutine("startin1");
+      
     }
 
     private void Connected(object sender = null, EventArgs e = null)
@@ -46,14 +73,17 @@ public class RemoteHeadManagerCB : Singleton<RemoteHeadManagerCB>
 
     private void Update()
     {
-        // Grab the current head transform and broadcast it to all the other users in the session
-        Transform headTransform = Camera.main.transform;
+        if (started)
+        {         // Grab the current head transform and broadcast it to all the other users in the session
+            Transform headTransform = Camera.main.transform;
 
-        // Transform the head position and rotation from world space into local space
-        Vector3 headPosition = transform.InverseTransformPoint(headTransform.position);
-        Quaternion headRotation = Quaternion.Inverse(transform.rotation) * headTransform.rotation;
+            // Transform the head position and rotation from world space into local space
+            Vector3 headPosition = transform.InverseTransformPoint(headTransform.position);
+            Quaternion headRotation = Quaternion.Inverse(transform.rotation) * headTransform.rotation;
 
-        CustomMessages.Instance.SendHeadTransform(headPosition, headRotation);
+            CustomMessages.Instance.SendHeadTransform(headPosition, headRotation);
+        }
+
     }
 
     protected override void OnDestroy()
@@ -146,13 +176,26 @@ public class RemoteHeadManagerCB : Singleton<RemoteHeadManagerCB>
         //newHeadObj.transform.parent = gameObject.transform;
         //newHeadObj.transform.localScale = Vector3.one * 0.2f;
         //return newHeadObj;
-        CONBUG.Instance.LOGit("CREATED A HEAD");
+        if (IAMSERVER)
+        {
 
-        GameObject newHeadObj = Instantiate(P1Helmet);
-        newHeadObj.transform.parent = gameObject.transform;
-        newHeadObj.transform.localScale = Vector3.one ;
-        return newHeadObj;
+            CONBUG.Instance.LOGit("I am server so I see ironman");
 
+            GameObject newHeadObj = Instantiate(P2Helmet);
+            newHeadObj.transform.parent = gameObject.transform;
+            newHeadObj.transform.localScale = Vector3.one;
+            return newHeadObj;
+
+        }
+        else
+        {
+            CONBUG.Instance.LOGit("I am cient i see the king");
+
+            GameObject newHeadObj = Instantiate(P1Helmet);
+            newHeadObj.transform.parent = gameObject.transform;
+            newHeadObj.transform.localScale = Vector3.one;
+            return newHeadObj;
+        }
     }
 
     /// <summary>

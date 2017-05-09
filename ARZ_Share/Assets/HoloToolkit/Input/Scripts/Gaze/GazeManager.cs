@@ -115,6 +115,7 @@ namespace HoloToolkit.Unity.InputModule
                 if (Camera.main != null)
                 {
                     GazeTransform = Camera.main.transform;
+                    Debug.Log("camera at " + GazeTransform.position);
                 }
                 else
                 {
