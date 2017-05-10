@@ -9,9 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/EntyPoint.unity
     guid: 573dba8d049f0f84582bf6c1acc416e4
   - enabled: 0
-    path: Assets/Scenes/otherscene.unity
-    guid: 496da1b25b4e1734ba3e21d10f0ae9dd
-  - enabled: 0
     path: Assets/Scenes/ScanRoom.unity
     guid: 48b4f109cc2465141b6fd142cbb8886e
   - enabled: 0
@@ -38,3 +35,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/tap2pla.unity
     guid: badfcfefe18ccc447bc905020bb104ae
+  - enabled: 1
+    path: Assets/Scenes/otherscene.unity
+    guid: 496da1b25b4e1734ba3e21d10f0ae9dd

@@ -21,7 +21,7 @@ public class VisualParentLink : MonoBehaviour {
 	 
     private Vector3 start;
     private Vector3 end;
-    private float lineWidth = 0.9f;
+    private float lineWidth = 1f;
     bool hasparent;
    
     private Color _col;
@@ -37,7 +37,7 @@ public class VisualParentLink : MonoBehaviour {
         lr.SetWidth(0.01f, 0.01f);
         lr.SetPosition(0, start);
         lr.SetPosition(1, end);
-        GameObject.Destroy(myLine, 33f);
+        GameObject.Destroy(myLine, 20f);
     }
  
     void drawQ(){

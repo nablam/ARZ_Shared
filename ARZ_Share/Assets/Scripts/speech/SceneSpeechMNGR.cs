@@ -12,17 +12,20 @@ public class SceneSpeechMNGR : MonoBehaviour {
 
     KeywordRecognizer keywordRecognizer = null;
     Dictionary<string, System.Action> keywords = new Dictionary<string, System.Action>();
-
-
+    public MasterGameDataSetup mds;
 
     // Use this for initialization
     void Start()
     {
-    
 
-        keywords.Add("Scann room", () =>
+        keywords.Add("bang bang", () =>
         {
-            SceneManager.LoadScene("ScanRoom");
+            mds.BANGBANG();
+        });
+
+        keywords.Add("show me the money", () =>
+        {
+            mds.ShowList();
         });
 
         keywords.Add("other room", () =>
@@ -30,9 +33,9 @@ public class SceneSpeechMNGR : MonoBehaviour {
             SceneManager.LoadScene("otherscene");
         });
 
-        keywords.Add("Edit room", () =>
+        keywords.Add("replace cubes", () =>
         {
-            SceneManager.LoadScene("EditRoom");
+            mds.replaceCrateswithbox();
         });
 
         // Tell the KeywordRecognizer about our keywords.

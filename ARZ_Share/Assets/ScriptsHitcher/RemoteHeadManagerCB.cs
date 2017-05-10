@@ -12,8 +12,13 @@ public class RemoteHeadManagerCB : Singleton<RemoteHeadManagerCB>
     public GameObject P1Helmet;
     public GameObject P2Helmet;
     private bool IAMSERVER = false;
+    public bool GetAmServer() { return IAMSERVER; }
     bool started = false;
+    public Vector3 targetedServerHead;
+  //  public Vector3 clientHEad;
 
+    public Material lazorMat;
+    public Material bluemat;
     bool initIdentity() {
         long localUserId;
         using (User localUser = SharingStage.Instance.Manager.GetLocalUser())
@@ -36,6 +41,24 @@ public class RemoteHeadManagerCB : Singleton<RemoteHeadManagerCB>
         public GameObject HeadObject;
     }
 
+
+    void Drawblue(Vector3 start, Vector3 end)
+    {
+
+        GameObject myLine = new GameObject();
+        myLine.transform.position = start;
+        myLine.AddComponent<LineRenderer>();
+        LineRenderer lr = myLine.GetComponent<LineRenderer>();
+       // lr.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
+        lr.material = lazorMat;
+        lr.startColor = Color.blue;
+        lr.endColor = Color.blue;
+        lr.startWidth = 0.01f;
+        lr.endWidth = 0.01f;
+        lr.SetPosition(0, start);
+        lr.SetPosition(1, end);
+        GameObject.Destroy(myLine, 0.2f);
+    }
     /// <summary>
     /// Keep a list of the remote heads, indexed by XTools userID
     /// </summary>
@@ -71,6 +94,17 @@ public class RemoteHeadManagerCB : Singleton<RemoteHeadManagerCB>
         SharingStage.Instance.SessionUsersTracker.UserLeft += UserLeftSession;
     }
 
+    void findANDsetTargetServerHead() {
+        if (IAMSERVER)
+        {
+            Transform headTransform = Camera.main.transform;
+            targetedServerHead = transform.InverseTransformPoint(headTransform.position);
+        }
+        else {
+            //if(clientHEad!=null)
+            //serverhead = clientHEad;
+        }
+    }
     private void Update()
     {
         if (started)
@@ -82,6 +116,14 @@ public class RemoteHeadManagerCB : Singleton<RemoteHeadManagerCB>
             Quaternion headRotation = Quaternion.Inverse(transform.rotation) * headTransform.rotation;
 
             CustomMessages.Instance.SendHeadTransform(headPosition, headRotation);
+
+            if (IAMSERVER) { targetedServerHead = headPosition; }
+            
+                
+
+           // findANDsetTargetServerHead();
+           if(targetedServerHead!=null)
+            Drawblue(this.transform.position, targetedServerHead);
         }
 
     }
@@ -164,6 +206,9 @@ public class RemoteHeadManagerCB : Singleton<RemoteHeadManagerCB>
         RemoteHeadInfo headInfo = GetRemoteHeadInfo(userID);
         headInfo.HeadObject.transform.localPosition = headPos;
         headInfo.HeadObject.transform.localRotation = headRot;
+
+        // serverhead = headPos;
+        targetedServerHead = transform.InverseTransformPoint(headPos);
     }
 
     /// <summary>

@@ -74,6 +74,7 @@ namespace HoloToolkit.Sharing.Tests
             }
         }
 
+        bool show = false;
         private static bool ShouldLocalUserCreateRoom
         {
             get
@@ -219,7 +220,7 @@ namespace HoloToolkit.Sharing.Tests
         {
             SharingStage.Instance.SharingManagerConnected -= Connected;
 
-            if (CONBUG.Instance != null){CONBUG.Instance.LOGit("impexpAnchor Manager: Starting...");}
+            if (CONBUG.Instance != null && show){CONBUG.Instance.LOGit("impexpAnchor Manager: Starting...");}
 
             // Setup the room manager callbacks.
             roomManager = SharingStage.Instance.Manager.GetRoomManager();
@@ -242,12 +243,12 @@ namespace HoloToolkit.Sharing.Tests
             if (successful)
             {
 
-                if (CONBUG.Instance != null){ CONBUG.Instance.LOGit("impExp impexpAnchor Manager: Sucessfully uploaded anchor");}
+                if (CONBUG.Instance != null && show){ CONBUG.Instance.LOGit("impExp impexpAnchor Manager: Sucessfully uploaded anchor");}
                 currentState = ImportExportState.AnchorEstablished;
             }
             else
             {
-                if (CONBUG.Instance != null){ CONBUG.Instance.LOGitError("impExp impexpAnchor Manager: Upload failed " + failureReason);}             
+                if (CONBUG.Instance != null && show){ CONBUG.Instance.LOGitError("impExp impexpAnchor Manager: Upload failed " + failureReason);}             
                 currentState = ImportExportState.Failed;
             }
 
@@ -264,7 +265,7 @@ namespace HoloToolkit.Sharing.Tests
             {
                 int datasize = request.GetDataSize();
 
-                if (CONBUG.Instance != null){CONBUG.Instance.LOGitFormat("impexpAnchor Manager: Anchor size: {0} bytes.", datasize.ToString());}
+                if (CONBUG.Instance != null && show){CONBUG.Instance.LOGitFormat("impexpAnchor Manager: Anchor size: {0} bytes.", datasize.ToString());}
 
                 rawAnchorData = new byte[datasize];
 
@@ -273,7 +274,7 @@ namespace HoloToolkit.Sharing.Tests
             }
             else
             {
-                if (CONBUG.Instance != null){CONBUG.Instance.LOGitWarning("impexpAnchor Manager: Anchor DL failed " + failureReason);}
+                if (CONBUG.Instance != null && show){CONBUG.Instance.LOGitWarning("impexpAnchor Manager: Anchor DL failed " + failureReason);}
 
                 // If we failed, we can ask for the data again.
 #if UNITY_WSA && !UNITY_EDITOR
@@ -284,7 +285,7 @@ namespace HoloToolkit.Sharing.Tests
 
         private void RoomManagerCallbacks_AnchorsChanged(Room room)
         {
-            if (CONBUG.Instance != null){CONBUG.Instance.LOGitFormat("impexpAnchor Manager: Anchors in room {0} changed", room.GetName());}
+            if (CONBUG.Instance != null && show){CONBUG.Instance.LOGitFormat("impexpAnchor Manager: Anchors in room {0} changed", room.GetName());}
 
             // if we're currently in the room where the anchors changed
             if (currentRoom == room)
@@ -301,7 +302,7 @@ namespace HoloToolkit.Sharing.Tests
             }
             else
             {
-                if (CONBUG.Instance != null) { CONBUG.Instance.LOGitWarning("Unable to get local user on session joined");  };
+                if (CONBUG.Instance != null && show) { CONBUG.Instance.LOGitWarning("Unable to get local user on session joined");  };
             }
         }
 
@@ -340,7 +341,7 @@ namespace HoloToolkit.Sharing.Tests
                 {
                     if (ShouldLocalUserCreateRoom)
                     {
-                        if (CONBUG.Instance != null){CONBUG.Instance.LOGit("impexpAnchor Manager: Creating room " + RoomName);}
+                        if (CONBUG.Instance != null && show){CONBUG.Instance.LOGit("impexpAnchor Manager: Creating room " + RoomName);}
 
                         // To keep anchors alive even if all users have left the session ...
                         // Pass in true instead of false in CreateRoom.
@@ -359,7 +360,7 @@ namespace HoloToolkit.Sharing.Tests
                             currentRoom = room;
                             roomManager.JoinRoom(currentRoom);
 
-                            if (CONBUG.Instance != null){CONBUG.Instance.LOGit("impexpAnchor Manager: Joining room " + room.GetName().GetString());}
+                            if (CONBUG.Instance != null && show){CONBUG.Instance.LOGit("impexpAnchor Manager: Joining room " + room.GetName().GetString());}
 
                             break;
                         }
@@ -390,7 +391,7 @@ namespace HoloToolkit.Sharing.Tests
                 currentState = ImportExportState.RoomApiInitialized;
             }
 
-            if (CONBUG.Instance != null){CONBUG.Instance.LOGit("impexpAnchor Manager: In room {" + roomManager.GetCurrentRoom().GetName().GetString() + "} with ID {" + roomManager.GetCurrentRoom().GetID().ToString() + " }");}
+            if (CONBUG.Instance != null && show){CONBUG.Instance.LOGit("impexpAnchor Manager: In room {" + roomManager.GetCurrentRoom().GetName().GetString() + "} with ID {" + roomManager.GetCurrentRoom().GetID().ToString() + " }");}
 
             yield return null;
         }
@@ -403,7 +404,7 @@ namespace HoloToolkit.Sharing.Tests
             // First, are there any anchors in this room?
             int anchorCount = currentRoom.GetAnchorCount();
 
-            if (CONBUG.Instance != null){CONBUG.Instance.LOGitFormat("impexpAnchor Manager: {0} anchors found.", anchorCount.ToString());}
+            if (CONBUG.Instance != null && show){CONBUG.Instance.LOGitFormat("impexpAnchor Manager: {0} anchors found.", anchorCount.ToString());}
 
 
             // If there are anchors, we should attach to the first one.
@@ -416,7 +417,7 @@ namespace HoloToolkit.Sharing.Tests
                 // Attempt to attach to the anchor in our local anchor store.
                 if (AttachToCachedAnchor(storedAnchorName) == false)
                 {
-                    if (CONBUG.Instance != null){CONBUG.Instance.LOGit("impexpAnchor Manager: Starting room anchor download of " + storedAnchorString);}
+                    if (CONBUG.Instance != null && show){CONBUG.Instance.LOGit("impexpAnchor Manager: Starting room anchor download of " + storedAnchorString);}
 
                     // If we cannot find the anchor by name, we will need the full data blob.
                     MakeAnchorDataRequest();
@@ -440,7 +441,7 @@ namespace HoloToolkit.Sharing.Tests
             else
             {
 
-                if (CONBUG.Instance != null){CONBUG.Instance.LOGitError("impexpAnchor Manager: Couldn't make the download request.");}
+                if (CONBUG.Instance != null && show){CONBUG.Instance.LOGitError("impexpAnchor Manager: Couldn't make the download request.");}
 
                 currentState = ImportExportState.Failed;
             }
@@ -476,13 +477,13 @@ namespace HoloToolkit.Sharing.Tests
         {
             if (located)
             {
-                if (CONBUG.Instance != null){CONBUG.Instance.LOGit("impexpAnchor Manager: Found anchor, ready to export");}
+                if (CONBUG.Instance != null && show){CONBUG.Instance.LOGit("impexpAnchor Manager: Found anchor, ready to export");}
 
                 currentState = ImportExportState.ReadyToExportInitialAnchor;
             }
             else
             {
-                if (CONBUG.Instance != null){CONBUG.Instance.LOGitError("impexpAnchor Manager: Failed to locate local anchor!");}
+                if (CONBUG.Instance != null && show){CONBUG.Instance.LOGitError("impexpAnchor Manager: Failed to locate local anchor!");}
 
                 currentState = ImportExportState.Failed;
             }
@@ -492,14 +493,14 @@ namespace HoloToolkit.Sharing.Tests
 
         private bool AttachToCachedAnchor(string anchorName)
         {
-            if (CONBUG.Instance != null){CONBUG.Instance.LOGitFormat("impexpAnchor Manager: Looking for cahced anchor {0}...", anchorName);}
+            if (CONBUG.Instance != null && show){CONBUG.Instance.LOGitFormat("impexpAnchor Manager: Looking for cahced anchor {0}...", anchorName);}
 
             string[] ids = anchorStore.GetAllIds();
             for (int index = 0; index < ids.Length; index++)
             {
                 if (ids[index] == anchorName)
                 {
-                    if (CONBUG.Instance != null){CONBUG.Instance.LOGitFormat("impexpAnchor Manager: Attempting to load cached anchor {0}...", anchorName);}
+                    if (CONBUG.Instance != null && show){CONBUG.Instance.LOGitFormat("impexpAnchor Manager: Attempting to load cached anchor {0}...", anchorName);}
 
                     WorldAnchor anchor = anchorStore.Load(ids[index], gameObject);
 
@@ -509,7 +510,7 @@ namespace HoloToolkit.Sharing.Tests
                     }
                     else
                     {
-                        if (CONBUG.Instance != null){ CONBUG.Instance.LOGitFormat("impexpAnchor Manager:  {0} is not yet located ", anchorName);}
+                        if (CONBUG.Instance != null && show){ CONBUG.Instance.LOGitFormat("impexpAnchor Manager:  {0} is not yet located ", anchorName);}
 
                         anchor.OnTrackingChanged += ImportExportAnchorManager_OnTrackingChanged_Attaching;
                         currentState = ImportExportState.AnchorEstablished;
@@ -532,7 +533,7 @@ namespace HoloToolkit.Sharing.Tests
             else
             {
 
-                if (CONBUG.Instance != null){CONBUG.Instance.LOGitWarning("impexpAnchor Manager: Failed to find local anchor from cache.");}
+                if (CONBUG.Instance != null && show){CONBUG.Instance.LOGitWarning("impexpAnchor Manager: Failed to find local anchor from cache.");}
 
                 MakeAnchorDataRequest();
             }
@@ -548,7 +549,7 @@ namespace HoloToolkit.Sharing.Tests
                 {
                     string first = anchorBatch.GetAllIds()[0];
 
-                    if (CONBUG.Instance != null){CONBUG.Instance.LOGit("impexpAnchor Manager: Sucessfully imported anchor " + first);}
+                    if (CONBUG.Instance != null && show){CONBUG.Instance.LOGit("impexpAnchor Manager: Sucessfully imported anchor " + first);}
 
                     WorldAnchor anchor = anchorBatch.LockObject(first, gameObject);
                     anchorStore.Save(first, anchor);
@@ -559,7 +560,7 @@ namespace HoloToolkit.Sharing.Tests
             else
             {
 
-                if (CONBUG.Instance != null){CONBUG.Instance.LOGitError("impexpAnchor Manager: Import failed");}
+                if (CONBUG.Instance != null && show){CONBUG.Instance.LOGitError("impexpAnchor Manager: Import failed");}
                 currentState = ImportExportState.DataReady;
             }
         }
@@ -585,7 +586,7 @@ namespace HoloToolkit.Sharing.Tests
             if (anchor != null && anchorStore.Save(exportingAnchorName, anchor))
             {
 
-                if (CONBUG.Instance != null){CONBUG.Instance.LOGit("impexpAnchor Manager: Exporting anchor " + exportingAnchorName);}
+                if (CONBUG.Instance != null && show){CONBUG.Instance.LOGit("impexpAnchor Manager: Exporting anchor " + exportingAnchorName);}
 
                 sharedAnchorInterface = new WorldAnchorTransferBatch();
                 sharedAnchorInterface.AddWorldAnchor(guidString, anchor);
@@ -593,7 +594,7 @@ namespace HoloToolkit.Sharing.Tests
             }
             else
             {
-                if (CONBUG.Instance != null){CONBUG.Instance.LOGitWarning("impexpAnchor Manager: Failed to export anchor, trying again...");}
+                if (CONBUG.Instance != null && show){CONBUG.Instance.LOGitWarning("impexpAnchor Manager: Failed to export anchor, trying again...");}
 
                 currentState = ImportExportState.InitialAnchorRequired;
             }
@@ -608,7 +609,7 @@ namespace HoloToolkit.Sharing.Tests
         {
             if (status == SerializationCompletionReason.Succeeded && exportingAnchorBytes.Count > MinTrustworthySerializedAnchorDataSize)
             {
-                if (CONBUG.Instance != null){CONBUG.Instance.LOGit("impexpAnchor Manager: Uploading anchor: " + exportingAnchorName);}
+                if (CONBUG.Instance != null && show){CONBUG.Instance.LOGit("impexpAnchor Manager: Uploading anchor: " + exportingAnchorName);}
 
                 roomManager.UploadAnchor(
                     currentRoom,
@@ -618,7 +619,7 @@ namespace HoloToolkit.Sharing.Tests
             }
             else
             {
-                if (CONBUG.Instance != null){CONBUG.Instance.LOGitWarning("impexpAnchor Manager: Failed to upload anchor, trying again...");}
+                if (CONBUG.Instance != null && show){CONBUG.Instance.LOGitWarning("impexpAnchor Manager: Failed to upload anchor, trying again...");}
 
                 currentState = ImportExportState.InitialAnchorRequired;
             }

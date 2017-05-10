@@ -10,6 +10,7 @@ using HoloToolkit.Unity;
 
 namespace HoloToolkit.Sharing.Spawning
 {
+  
     /// <summary>
     /// Structure linking a prefab and a data model class.
     /// </summary>
@@ -27,6 +28,7 @@ namespace HoloToolkit.Sharing.Spawning
     /// </summary>
     public class PrefabSpawnManager : SpawnManager<SyncSpawnedObject>
     {
+        public MasterGameDataSetup mds;
         /// <summary>
         /// List of prefabs that can be spawned by this application.
         /// </summary>
@@ -83,7 +85,34 @@ namespace HoloToolkit.Sharing.Spawning
                 }
             }
 
-            CreatePrefabInstance(spawnedObject, prefab, parent, spawnedObject.Name.Value);
+            GameObject go= CreatePrefabInstance(spawnedObject, prefab, parent, spawnedObject.Name.Value);
+          //  go.AddComponent<VisualParentLink>();
+            string goname = "\n added" + go.name;
+            CONBUG.Instance.LOGit("got go");
+            CONBUG.Instance.LOGit("parent name" + parent.name);
+             go.transform.parent.gameObject.GetComponentInChildren<TextMesh>().text += goname;
+
+            DrawLineRED(go, parent);
+            mds.cratesPlaced.Add(go);
+        }
+
+
+        void DrawLineRED(GameObject GStart, GameObject Gend)
+        {
+
+            Vector3 start = GStart.transform.position;
+            Vector3 end = Gend.transform.position;
+
+            GameObject myLine = new GameObject();
+            myLine.transform.position = start;
+            myLine.AddComponent<LineRenderer>();
+            LineRenderer lr = myLine.GetComponent<LineRenderer>();
+            //lr.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
+            lr.SetColors(Color.red, Color.red);
+            lr.SetWidth(0.01f, 0.01f);
+            lr.SetPosition(0, start);
+            lr.SetPosition(1, end);
+            GameObject.Destroy(myLine, 1f);
         }
 
         protected override void RemoveFromNetwork(SyncSpawnedObject removedObject)
@@ -149,11 +178,12 @@ namespace HoloToolkit.Sharing.Spawning
 
             if (parent == null)
             {
+                CONBUG.Instance.LOGit(" No parent passed we make this default");
                 parent = gameObject;
-                CONBUG.Instance.LOGit("dady=" + parent.name);
+                CONBUG.Instance.LOGit("default parent=" + parent.name);
             }
             else
-                CONBUG.Instance.LOGit(" No parent passed");
+                CONBUG.Instance.LOGit("dady=" + parent.name);
             // Validate that the prefab is valid
             GameObject prefabToSpawn = GetPrefab(dataModel, baseName);
             if (!prefabToSpawn)
@@ -202,6 +232,7 @@ namespace HoloToolkit.Sharing.Spawning
         /// <returns>True if the function succeeded, false if not.</returns>
         public bool Spawn(SyncSpawnedObject dataModel, Vector3 localPosition, Quaternion localRotation, GameObject parent, string baseName, bool isOwnedLocally)
         {
+            CONBUG.Instance.LOGit("parent is " + parent.name);
             return Spawn(dataModel, localPosition, localRotation, null, parent, baseName, isOwnedLocally);
         }
 

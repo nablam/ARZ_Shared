@@ -11,10 +11,10 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: ARZ_Share
+  productName: ___Zshare
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
-  m_SplashScreenBackgroundColor: {r: 0.13333334, g: 0.17254902, b: 0.21176471, a: 1}
+  m_SplashScreenBackgroundColor: {r: 0.22783303, g: 0.47421062, b: 0.7205882, a: 1}
   m_ShowUnitySplashScreen: 1
   m_ShowUnitySplashLogo: 1
   m_SplashScreenOverlayOpacity: 1
@@ -514,7 +514,7 @@ PlayerSettings:
   metroCertificateNotAfter: 80b0e09ad7ddd301
   metroApplicationDescription: ARZ_Share
   wsaImages: {}
-  metroTileShortName: ARZ_Share
+  metroTileShortName: ___Zshare
   metroCommandLineArgsFile: 
   metroTileShowName: 0
   metroMediumTileShowName: 0
