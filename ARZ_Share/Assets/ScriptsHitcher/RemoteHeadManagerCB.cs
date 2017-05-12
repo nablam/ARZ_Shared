@@ -112,18 +112,21 @@ public class RemoteHeadManagerCB : Singleton<RemoteHeadManagerCB>
             Transform headTransform = Camera.main.transform;
 
             // Transform the head position and rotation from world space into local space
-            Vector3 headPosition = transform.InverseTransformPoint(headTransform.position);
+            Vector3 headPosition = transform.parent.InverseTransformPoint(headTransform.position);
             Quaternion headRotation = Quaternion.Inverse(transform.rotation) * headTransform.rotation;
 
             CustomMessages.Instance.SendHeadTransform(headPosition, headRotation);
 
             if (IAMSERVER) { targetedServerHead = headPosition; }
-            
-                
 
+
+            CONREMOTEHEAD.Instance.LOG_sendmyheadTransform(headTransform,this.transform, headPosition);
            // findANDsetTargetServerHead();
            if(targetedServerHead!=null)
             Drawblue(this.transform.position, targetedServerHead);
+
+
+            CONREMOTEHEAD.Instance.LOG_SERVERHEADTARG(IAMSERVER, targetedServerHead);
         }
 
     }
@@ -208,7 +211,8 @@ public class RemoteHeadManagerCB : Singleton<RemoteHeadManagerCB>
         headInfo.HeadObject.transform.localRotation = headRot;
 
         // serverhead = headPos;
-        targetedServerHead = transform.InverseTransformPoint(headPos);
+        targetedServerHead = headPos;//transform.InverseTransformPoint(headPos);
+        CONREMOTEHEAD.Instance.LOG_ReceivedHead(headPos, headInfo.HeadObject.transform.position);
     }
 
     /// <summary>
@@ -224,20 +228,20 @@ public class RemoteHeadManagerCB : Singleton<RemoteHeadManagerCB>
         if (IAMSERVER)
         {
 
-            CONBUG.Instance.LOGit("I am server so I see ironman");
+            CONBUG.Instance.LOGit("SERVER SERVER SERVER SERVER SERVER SERVER SERVER SERVER ");
 
             GameObject newHeadObj = Instantiate(P2Helmet);
-            newHeadObj.transform.parent = gameObject.transform;
+            newHeadObj.transform.parent = gameObject.transform.parent;
             newHeadObj.transform.localScale = Vector3.one;
             return newHeadObj;
 
         }
         else
         {
-            CONBUG.Instance.LOGit("I am cient i see the king");
+            CONBUG.Instance.LOGit("I am CLIENT CLIENT CLIENT CLIENT CLIENT CLIENT CLIENT CLIENT");
 
             GameObject newHeadObj = Instantiate(P1Helmet);
-            newHeadObj.transform.parent = gameObject.transform;
+            newHeadObj.transform.parent = gameObject.transform.parent;
             newHeadObj.transform.localScale = Vector3.one;
             return newHeadObj;
         }

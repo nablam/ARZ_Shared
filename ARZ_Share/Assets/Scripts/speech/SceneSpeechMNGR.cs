@@ -18,6 +18,13 @@ public class SceneSpeechMNGR : MonoBehaviour {
     void Start()
     {
 
+        
+
+             keywords.Add("Flip Log", () =>
+             {
+                 CONREMOTEHEAD.Instance.FlipLog();
+             });
+
         keywords.Add("bang bang", () =>
         {
             mds.BANGBANG();

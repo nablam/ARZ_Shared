@@ -74,7 +74,7 @@ namespace HoloToolkit.Sharing.Tests
             }
         }
 
-        bool show = false;
+        bool show = true;
         private static bool ShouldLocalUserCreateRoom
         {
             get
@@ -243,12 +243,12 @@ namespace HoloToolkit.Sharing.Tests
             if (successful)
             {
 
-                if (CONBUG.Instance != null && show){ CONBUG.Instance.LOGit("impExp impexpAnchor Manager: Sucessfully uploaded anchor");}
+                if (CONBUG.Instance != null ){ CONBUG.Instance.LOGit("impExp impexpAnchor Manager: Sucessfully uploaded anchor");}
                 currentState = ImportExportState.AnchorEstablished;
             }
             else
             {
-                if (CONBUG.Instance != null && show){ CONBUG.Instance.LOGitError("impExp impexpAnchor Manager: Upload failed " + failureReason);}             
+                if (CONBUG.Instance != null  ){ CONBUG.Instance.LOGitError("impExp impexpAnchor Manager: Upload failed " + failureReason);}             
                 currentState = ImportExportState.Failed;
             }
 
@@ -265,7 +265,7 @@ namespace HoloToolkit.Sharing.Tests
             {
                 int datasize = request.GetDataSize();
 
-                if (CONBUG.Instance != null && show){CONBUG.Instance.LOGitFormat("impexpAnchor Manager: Anchor size: {0} bytes.", datasize.ToString());}
+                if (CONBUG.Instance != null ){CONBUG.Instance.LOGitFormat("impexpAnchor Manager: Anchor size: {0} bytes.", datasize.ToString());}
 
                 rawAnchorData = new byte[datasize];
 
@@ -274,18 +274,17 @@ namespace HoloToolkit.Sharing.Tests
             }
             else
             {
-                if (CONBUG.Instance != null && show){CONBUG.Instance.LOGitWarning("impexpAnchor Manager: Anchor DL failed " + failureReason);}
+                if (CONBUG.Instance != null ){CONBUG.Instance.LOGitWarning("impexpAnchor Manager: Anchor DL failed " + failureReason);}
 
-                // If we failed, we can ask for the data again.
-#if UNITY_WSA && !UNITY_EDITOR
+
                 MakeAnchorDataRequest();
-#endif
+
             }
         }
 
         private void RoomManagerCallbacks_AnchorsChanged(Room room)
         {
-            if (CONBUG.Instance != null && show){CONBUG.Instance.LOGitFormat("impexpAnchor Manager: Anchors in room {0} changed", room.GetName());}
+            if (CONBUG.Instance != null  ){CONBUG.Instance.LOGitFormat("impexpAnchor Manager: Anchors in room {0} changed", room.GetName());}
 
             // if we're currently in the room where the anchors changed
             if (currentRoom == room)
